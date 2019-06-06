@@ -1,6 +1,6 @@
 package com.pwc.stepDefinitions;
 
-import com.pwc.Password;
+import com.pwc.core.Password;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 
