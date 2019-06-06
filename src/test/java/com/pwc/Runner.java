@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
         features = "src/test/resources/features",
         glue = "com.pwc",
         monochrome = true,
-//        tags = {"@smoke"},
+        tags = {"@smoke"},
         plugin = {
                 "pretty",
                 "html:target/cucumber-report"
