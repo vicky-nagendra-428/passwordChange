@@ -1,5 +1,6 @@
-package com.pwc;
+package com.pwc.core;
 
+import com.pwc.validations.DBValidations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,17 @@ public class Password {
         passwordChangeResult = checkNewPasswordValidity(newPassword);
 
         if (passwordChangeResult == null) {
-
+            DBValidations dbValidations = new DBValidations();
+            if (dbValidations.checkPasswordMatchAgainstDb(oldPassword)) {
+                if (! dbValidations.checkThePasswordIsAlreadyUsed(newPassword)) {
+                    dbValidations.updateThePassword(newPassword);
+                    passwordChangeResult = "Password Updated successfully";
+                } else {
+                    passwordChangeResult = "Similar password has been used, please use another one";
+                }
+            } else {
+                passwordChangeResult = "Old Password Doesn't match with exising password";
+            }
         }
     }
 

@@ -3,13 +3,13 @@ Feature: Change Password Test cases
   @smoke
   Scenario: Incorrect old password
 
-    Given I enter the old password "ThisIsOldPassword#1" and new password "ThisIsNewWordPass#2"
+    Given I enter the old password "FalseThisIsOldPassword#01" and new password "ThisIsNewWordPass#2"
     Then I should get the message "Old Password Doesn't match with exising password"
 
   @smoke
   Scenario:  new password is matched 80% with old password
 
-    Given I enter the old password "ThisIsOldPassword#1" and new password "ThisIsOldPassword#2"
+    Given I enter the old password "ThisIsOldPassword#01" and new password "ThisIsOldPassword#02"
     Then I should get the message "Similar password has been used, please use another one"
 
   @smoke
@@ -47,3 +47,9 @@ Feature: Change Password Test cases
 
     Given I enter the old password "ThisIsOldPassword#1" and new password "Pass1234567890!test"
     Then I should get the message "Password should not contain 50% of numeric values of its length"
+
+  @smoke
+  Scenario: correct old password and valid new password
+
+    Given I enter the old password "ThisIsOldPassword#1" and new password "ThisIsNewWordPass#2"
+    Then I should get the message "Password Updated successfully"
