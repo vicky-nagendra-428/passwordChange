@@ -1,6 +1,5 @@
-package com.pwc.core;
+package com.pwc.validations;
 
-import com.pwc.validations.DBValidations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,21 +15,27 @@ public class Password {
 
     public void changePassword(String oldPassword, String newPassword) {
 
-        passwordChangeResult = checkNewPasswordValidity(newPassword);
+        try {
+            passwordChangeResult = checkNewPasswordValidity(newPassword);
 
-        if (passwordChangeResult == null) {
-            DBValidations dbValidations = new DBValidations();
-            if (dbValidations.checkPasswordMatchAgainstDb(oldPassword)) {
-                if (! dbValidations.checkThePasswordIsAlreadyUsed(newPassword)) {
-                    dbValidations.updateThePassword(newPassword);
-                    passwordChangeResult = "Password Updated successfully";
+            if (passwordChangeResult == null) {
+                DBValidations dbValidations = new DBValidations();
+                if (dbValidations.checkPasswordMatchAgainstDb(oldPassword)) {
+                    if (! dbValidations.checkThePasswordIsAlreadyUsed(newPassword)) {
+                        dbValidations.updateThePassword(newPassword);
+                        passwordChangeResult = "Password Updated successfully";
+                    } else {
+                        passwordChangeResult = "Similar password has been used, please use another one";
+                    }
                 } else {
-                    passwordChangeResult = "Similar password has been used, please use another one";
+                    passwordChangeResult = "Old Password Doesn't match with existing password";
                 }
-            } else {
-                passwordChangeResult = "Old Password Doesn't match with exising password";
             }
+        } catch (Exception e) {
+            passwordChangeResult = "Failed to update the password.\nPossible cause of failure : " + e.getMessage();
         }
+
+
     }
 
     public String getThePasswordChangeStatus() {
