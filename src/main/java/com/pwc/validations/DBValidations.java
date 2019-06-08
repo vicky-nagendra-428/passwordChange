@@ -36,7 +36,7 @@ public class DBValidations {
     }
 
     public void updateThePassword(String newPassword) {
-        logger.info("Inside updateThePassword method");
         dbSpy.setPassword(newPassword);
+        logger.info("Inside updateThePassword method : success");
     }
 }

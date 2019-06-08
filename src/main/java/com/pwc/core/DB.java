@@ -2,7 +2,7 @@ package com.pwc.core;
 
 public class DB {
 
-    private static String password = "ThisIsOldPassword#1";
+    private String password = "ThisIsOldPassword#1";
 
     public void setPassword(String newPassword) {
         this.password = newPassword;
