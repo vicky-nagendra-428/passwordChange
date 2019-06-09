@@ -1,5 +1,19 @@
 # passwordChange
 
+This maven java project is to make the function changePassword(old, new) as a rest api using docker.
+
+main directories:
+-----------------
+
+src/main/java :
+consists of password class, mocked DB classes and rest component class to serve the http requests
+exposed http calls are: GET - to check the service health, PUT - to update the password
+
+src/test :
+resources folder - contains cucumber functional tests
+Junit tests - which validates the Rest API tests, little performance tests (5 parallel)
+
+
 ### What needs to be done - setup:
 ---------------------------------
 ## Setup used
@@ -16,7 +30,7 @@ TestNG (For API level tests, very little load test)
 For making the functionality as a Rest API:
 Used SparkJava
 
-## To run locally,
+## To run locally, from project root folder
 mvn clean install
 
 and then, to start the service
