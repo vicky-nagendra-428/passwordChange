@@ -40,22 +40,25 @@ public class PasswordChangeRestApi {
                 oldPassword = passwordHolder.get("oldPassword").getAsString();
                 newPassword = passwordHolder.get("newPassword").getAsString();
 
+                if (oldPassword.isEmpty() || newPassword.isEmpty()) {
+                    responseJson.addProperty("STATUS", "Failed to process your request. Possible cause : missing required information");
+                } else {
+                    Password password = new Password();
+                    password.changePassword(oldPassword, newPassword);
+                    responseJson.addProperty("STATUS", password.getThePasswordChangeStatus());
+                }
+
             } catch (NullPointerException | IllegalStateException | JsonSyntaxException e) {
                 responseJson.addProperty("STATUS",
                         "API '/changePassword' needs a well formed JSON body with information to process the request." +
                                 "Possible cause : Empty Json body/ missing required data/ incorrect Json format");
+            } catch (Exception e) {
+                response.status(500);
+                responseJson.addProperty("STATUS",
+                        "Unknown exception. Please try again.");
+            } finally {
                 return responseJson;
             }
-
-            if (oldPassword.isEmpty() || newPassword.isEmpty()) {
-                responseJson.addProperty("STATUS", "Failed to process your request. Possible cause : missing required information");
-            } else {
-                Password password = new Password();
-                password.changePassword(oldPassword, newPassword);
-                responseJson.addProperty("STATUS", password.getThePasswordChangeStatus());
-            }
-
-            return responseJson;
         });
 
     }

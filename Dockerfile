@@ -4,10 +4,8 @@ RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
 COPY pom.xml /opt/app
-RUN mvn install
-
 COPY src /opt/app/src
-RUN mvn package
+RUN mvn clean install
 
 EXPOSE 4567
 
