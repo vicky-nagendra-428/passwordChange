@@ -28,12 +28,12 @@ public class DBValidations {
         return dbSpy.checkPasswordAgainstDBValue(oldPassword);
     }
 
-    public boolean checkThePasswordIsAlreadyUsed(String newPassword) {
-        logger.info("Inside checkThePasswordIsAlreadyUsed method");
-        doReturn(true).when(dbSpy).isPasswordSimilarToOldPassword("ThisIsOldPassword#02");
-        doReturn(false).when(dbSpy).isPasswordSimilarToOldPassword(matches("\\w+.NewWordPass.*"));
-        return dbSpy.isPasswordSimilarToOldPassword(newPassword);
-    }
+//    public boolean checkThePasswordIsAlreadyUsed(String newPassword) {
+//        logger.info("Inside checkThePasswordIsAlreadyUsed method");
+//        doReturn(true).when(dbSpy).isPasswordSimilarToOldPassword("ThisIsOldPassword#02");
+//        doReturn(false).when(dbSpy).isPasswordSimilarToOldPassword(matches("\\w+.NewWordPass.*"));
+//        return dbSpy.isPasswordSimilarToOldPassword(newPassword);
+//    }
 
     public void updateThePassword(String newPassword) {
         dbSpy.setPassword(newPassword);

@@ -1,5 +1,9 @@
 package com.pwc.validations;
 
+import net.ricecode.similarity.LevenshteinDistanceStrategy;
+import net.ricecode.similarity.SimilarityStrategy;
+import net.ricecode.similarity.StringSimilarityService;
+import net.ricecode.similarity.StringSimilarityServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,17 +20,13 @@ public class Password {
     public void changePassword(String oldPassword, String newPassword) {
 
         try {
-            passwordChangeResult = checkNewPasswordValidity(newPassword);
+            passwordChangeResult = checkNewPasswordValidity(oldPassword, newPassword);
 
             if (passwordChangeResult == null) {
                 DBValidations dbValidations = new DBValidations();
                 if (dbValidations.checkPasswordMatchAgainstDb(oldPassword)) {
-                    if (! dbValidations.checkThePasswordIsAlreadyUsed(newPassword)) {
-                        dbValidations.updateThePassword(newPassword);
-                        passwordChangeResult = "Password Updated successfully";
-                    } else {
-                        passwordChangeResult = "Similar password has been used, please use another one";
-                    }
+                    dbValidations.updateThePassword(newPassword);
+                    passwordChangeResult = "Password Updated successfully";
                 } else {
                     passwordChangeResult = "Old Password Doesn't match with existing password";
                 }
@@ -47,7 +47,7 @@ public class Password {
      * @param newPassword
      * @return This method returns a validation string based on multiple validations
      */
-    private String checkNewPasswordValidity(String newPassword) {
+    private String checkNewPasswordValidity(String oldPassword, String newPassword) {
         String returnMessage = null;
 
         if (newPassword.length() < 18) {
@@ -62,8 +62,9 @@ public class Password {
             returnMessage = "Password can not have more than 4 special characters";
         } else if (getTheNumericCharacterPercentage(newPassword) >= 50) {
             returnMessage = "Password should not contain 50% of numeric values of its length";
+        } else if (getThePasswordSimilarity(newPassword, oldPassword) > 0.80) {
+            returnMessage = "Similar password has been used, please use another one";
         }
-
 
         return returnMessage;
     }
@@ -71,7 +72,7 @@ public class Password {
     /**
      *
      * @param newPassword
-     * @return This method retunrs a true if there are any unacceptable characters exist in the input, else false
+     * @return This method returns true if there are any unacceptable characters exist in the input, else false
      */
     private boolean checkForUnacceptableCharacters(String newPassword) {
         logger.info("Inside checkForUnacceptableCharacters method");
@@ -172,6 +173,20 @@ public class Password {
             count++;
         }
         return count;
+    }
+
+    /**
+     *
+     * @param newPassword
+     * @param oldPassword
+     * @return similarity score (distance) - if the score is lower the strings are more likely to be similar
+     * 1.0 means strings are same, 0.0 means are string are absolutely different
+     */
+    private double getThePasswordSimilarity(String oldPassword, String newPassword) {
+        logger.info("Inside getThePasswordSimilarity method");
+        SimilarityStrategy strategy = new LevenshteinDistanceStrategy();
+        StringSimilarityService service = new StringSimilarityServiceImpl(strategy);
+        return service.score(newPassword, oldPassword);
     }
 
 }
