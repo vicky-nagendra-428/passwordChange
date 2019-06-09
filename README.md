@@ -16,7 +16,7 @@ TestNG (For API level tests, very little load test)
 For making the functionality as a Rest API:
 Used SparkJava
 
-To run locally,
+## To run locally,
 mvn clean install
 
 and then, to start the service
