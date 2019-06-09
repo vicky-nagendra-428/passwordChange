@@ -37,4 +37,9 @@ Json Body :
 }
 
 
+## to run from docker
 
+docker pull nagendravarma428/passwordchange
+docker run -p 8888:4567 nagendravarma428/passwordchange
+
+Note:- 8888, can be a port of your choice. 4567 is the exposed port
